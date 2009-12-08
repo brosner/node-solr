@@ -39,13 +39,16 @@ var Solr = function(url) {
     this.host = "127.0.0.1";
     this.port = 8983;
     this.path = "/solr";
+    this.debug = true;
 }
 Solr.prototype = {
     request: function(method, path, params, options) {
         var client = cacheClient(this.host, this.port);
         params["wt"] = "json"
         var path = this.path + path + "?" + buildQS(params);
-        sys.puts("SOLR: " + toJSON(path));
+        if (this.debug) {
+            sys.puts("Solr.request START: " + method + " " + toJSON(path));
+        }
         // @@@ this feels like a bug. i'd think node would at least do this
         // much for me.
         headers = [
@@ -59,7 +62,9 @@ Solr.prototype = {
                 data += chunk;
             });
             response.addListener("complete", function() {
-                sys.puts("SOLR COMPLETE: " + data);
+                if (this.debug) {
+                    sys.puts("Solr.request COMPLETE: " + data);
+                }
                 data = JSON.parse(data);
                 if (options.success) {
                     options.success(data);
