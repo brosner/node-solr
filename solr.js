@@ -60,20 +60,20 @@ Solr.prototype = {
             });
             response.addListener("complete", function() {
                 sys.puts("SOLR COMPLETE: " + data);
+                data = JSON.parse(data);
                 if (options.success) {
                     options.success(data);
                 }
             });
         });
     },
-    search: function(q) {
+    search: function(q, callback) {
         params = {
             q: q
         }
         this.request("GET", "/select/", params, {
             success: function(data) {
-                // @@@
-                sys.puts(data);
+                callback(data["response"]);
             }
         });
     }
