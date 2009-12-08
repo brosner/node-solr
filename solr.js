@@ -36,10 +36,10 @@ function buildQS(params) {
 
 
 var Solr = function(url) {
-    // @@@ parse host, port and path from url
-    this.host = "127.0.0.1";
-    this.port = 8983;
-    this.path = "/solr";
+    parsed = http.parseUri(url);
+    this.host = parsed["host"];
+    this.port = parsed["port"];
+    this.path = parsed["path"];
     this.debug = true;
 }
 Solr.prototype = {
