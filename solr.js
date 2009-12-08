@@ -10,8 +10,8 @@ function toJSON(obj) {
 }
 
 
-function cacheClient(host, port) {
-    var key = [host, port];
+function cacheClient(port, host) {
+    var key = [port, host];
     var client = clients[key];
     if (client) {
         return client;
@@ -43,7 +43,7 @@ var Solr = function(url) {
 }
 Solr.prototype = {
     request: function(method, path, params, options) {
-        var client = cacheClient(this.host, this.port);
+        var client = cacheClient(this.port, this.host);
         params["wt"] = "json"
         var path = this.path + path + "?" + buildQS(params);
         if (this.debug) {
